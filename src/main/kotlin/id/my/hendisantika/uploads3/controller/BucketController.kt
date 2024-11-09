@@ -3,6 +3,7 @@ package id.my.hendisantika.uploads3.controller
 import org.springframework.web.bind.annotation.*
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest
+import software.amazon.awssdk.services.s3.model.ListObjectsRequest
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
 
 /**
@@ -54,5 +55,17 @@ class BucketController(private val s3Client: S3Client) {
         val fileContent = PutObjectRequestBody.fromString(request.content)
 
         s3Client.putObject(createObjectRequest, fileContent)
+    }
+
+    @GetMapping("/{bucketName}/objects")
+    fun listObjects(@PathVariable bucketName: String): List<String> {
+        val listObjectsRequest = ListObjectsRequest.builder()
+            .bucket(bucketName)
+            .build()
+
+        val response = s3Client.listObjects(listObjectsRequest)
+
+        return response.contents()
+            .map { s3Object -> s3Object.key() }
     }
 }
