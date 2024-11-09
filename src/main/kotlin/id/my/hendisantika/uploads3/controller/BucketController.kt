@@ -15,4 +15,6 @@ typealias PutObjectRequestBody = software.amazon.awssdk.core.sync.RequestBody
 
 data class BucketRequest(val bucketName: String)
 
+data class ObjectRequest(val objectName: String, val content: String)
+
 class BucketController
