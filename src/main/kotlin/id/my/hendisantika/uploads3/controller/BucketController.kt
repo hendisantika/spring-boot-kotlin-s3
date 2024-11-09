@@ -2,10 +2,7 @@ package id.my.hendisantika.uploads3.controller
 
 import org.springframework.web.bind.annotation.*
 import software.amazon.awssdk.services.s3.S3Client
-import software.amazon.awssdk.services.s3.model.CreateBucketRequest
-import software.amazon.awssdk.services.s3.model.GetObjectRequest
-import software.amazon.awssdk.services.s3.model.ListObjectsRequest
-import software.amazon.awssdk.services.s3.model.PutObjectRequest
+import software.amazon.awssdk.services.s3.model.*
 import kotlin.text.Charsets.UTF_8
 
 /**
@@ -81,5 +78,39 @@ class BucketController(private val s3Client: S3Client) {
         val response = s3Client.getObjectAsBytes(getObjectRequest)
 
         return response.asString(UTF_8)
+    }
+
+    @DeleteMapping("/{bucketName}")
+    fun deleteBucket(@PathVariable bucketName: String) {
+        val listObjectsRequest = ListObjectsRequest.builder()
+            .bucket(bucketName)
+            .build()
+
+        val listObjectsResponse = s3Client.listObjects(listObjectsRequest)
+
+        val allObjectsIdentifiers = listObjectsResponse.contents()
+            .map { s3Object ->
+                ObjectIdentifier.builder()
+                    .key(s3Object.key())
+                    .build()
+            }
+
+        val del = Delete.builder()
+            .objects(allObjectsIdentifiers)
+            .build()
+
+        val deleteObjectsRequest = DeleteObjectsRequest.builder()
+            .bucket(bucketName)
+            .delete(del)
+            .build()
+
+        s3Client.deleteObjects(deleteObjectsRequest)
+
+
+        val deleteBucketRequest = DeleteBucketRequest.builder()
+            .bucket(bucketName)
+            .build()
+
+        s3Client.deleteBucket(deleteBucketRequest)
     }
 }
