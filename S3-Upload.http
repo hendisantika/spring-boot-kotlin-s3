@@ -1,0 +1,24 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+### Upload file
+POST http://localhost:8080/buckets
+Content-Type: application/json
+
+{
+  "bucketName": "kotlin-testing"
+}
+
+### List Buckets
+GET http://localhost:8080/buckets
+Content-Type: application/json
+
+### Upload File
+POST http://localhost:8080/buckets/kotlin-testing/objects
+Content-Type: application/json
+
+{
+  "objectName": "test",
+  "content": "test1.png"
+}
