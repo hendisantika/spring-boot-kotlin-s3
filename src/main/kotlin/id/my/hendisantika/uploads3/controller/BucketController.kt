@@ -3,8 +3,10 @@ package id.my.hendisantika.uploads3.controller
 import org.springframework.web.bind.annotation.*
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest
+import software.amazon.awssdk.services.s3.model.GetObjectRequest
 import software.amazon.awssdk.services.s3.model.ListObjectsRequest
 import software.amazon.awssdk.services.s3.model.PutObjectRequest
+import kotlin.text.Charsets.UTF_8
 
 /**
  * Created by IntelliJ IDEA.
@@ -67,5 +69,17 @@ class BucketController(private val s3Client: S3Client) {
 
         return response.contents()
             .map { s3Object -> s3Object.key() }
+    }
+
+    @GetMapping("/{bucketName}/objects/{objectName}")
+    fun getObject(@PathVariable bucketName: String, @PathVariable objectName: String): String {
+        val getObjectRequest = GetObjectRequest.builder()
+            .bucket(bucketName)
+            .key(objectName)
+            .build()
+
+        val response = s3Client.getObjectAsBytes(getObjectRequest)
+
+        return response.asString(UTF_8)
     }
 }
