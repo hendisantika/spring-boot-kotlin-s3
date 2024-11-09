@@ -1,5 +1,6 @@
 package id.my.hendisantika.uploads3.controller
 
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import software.amazon.awssdk.services.s3.S3Client
@@ -23,4 +24,14 @@ data class ObjectRequest(val objectName: String, val content: String)
 
 @RestController
 @RequestMapping("/buckets")
-class BucketController(private val s3Client: S3Client)
+class BucketController(private val s3Client: S3Client) {
+    @GetMapping
+    fun listBuckets(): List<String> {
+        val response = s3Client.listBuckets()
+
+        return response.buckets()
+            .mapIndexed { index, bucket ->
+                "Bucket #${index + 1}: ${bucket.name()}"
+            }
+    }
+}
