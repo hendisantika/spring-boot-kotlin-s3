@@ -1,5 +1,9 @@
 package id.my.hendisantika.uploads3.controller
 
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+import software.amazon.awssdk.services.s3.S3Client
+
 /**
  * Created by IntelliJ IDEA.
  * Project : upload-s3
@@ -17,4 +21,6 @@ data class BucketRequest(val bucketName: String)
 
 data class ObjectRequest(val objectName: String, val content: String)
 
-class BucketController
+@RestController
+@RequestMapping("/buckets")
+class BucketController(private val s3Client: S3Client)
