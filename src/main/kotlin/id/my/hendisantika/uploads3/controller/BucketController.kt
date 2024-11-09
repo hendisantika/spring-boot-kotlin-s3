@@ -3,6 +3,7 @@ package id.my.hendisantika.uploads3.controller
 import org.springframework.web.bind.annotation.*
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest
+import software.amazon.awssdk.services.s3.model.PutObjectRequest
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,5 +42,17 @@ class BucketController(private val s3Client: S3Client) {
             .build()
 
         s3Client.createBucket(createBucketRequest)
+    }
+
+    @PostMapping("/{bucketName}/objects")
+    fun createObject(@PathVariable bucketName: String, @RequestBody request: ObjectRequest) {
+        val createObjectRequest = PutObjectRequest.builder()
+            .bucket(bucketName)
+            .key(request.objectName)
+            .build()
+
+        val fileContent = PutObjectRequestBody.fromString(request.content)
+
+        s3Client.putObject(createObjectRequest, fileContent)
     }
 }
