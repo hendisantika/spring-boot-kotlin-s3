@@ -1,9 +1,8 @@
 package id.my.hendisantika.uploads3.controller
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import software.amazon.awssdk.services.s3.S3Client
+import software.amazon.awssdk.services.s3.model.CreateBucketRequest
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,5 +32,14 @@ class BucketController(private val s3Client: S3Client) {
             .mapIndexed { index, bucket ->
                 "Bucket #${index + 1}: ${bucket.name()}"
             }
+    }
+
+    @PostMapping
+    fun createBucket(@RequestBody request: BucketRequest) {
+        val createBucketRequest = CreateBucketRequest.builder()
+            .bucket(request.bucketName)
+            .build()
+
+        s3Client.createBucket(createBucketRequest)
     }
 }
