@@ -13,4 +13,6 @@ package id.my.hendisantika.uploads3.controller
 
 typealias PutObjectRequestBody = software.amazon.awssdk.core.sync.RequestBody
 
+data class BucketRequest(val bucketName: String)
+
 class BucketController
