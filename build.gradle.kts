@@ -27,7 +27,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.1")
+    implementation("io.awspring.cloud:spring-cloud-aws-starter-s3:3.2.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
